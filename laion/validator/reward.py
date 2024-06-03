@@ -36,14 +36,7 @@ def reward(query: str, response: List[str]) -> float:
     prompt = None
     urls = []
 
-    # print(query)
-    # print(response)
-    taskId = response['taskId']
-    print(f"-----------  taskId ::: {taskId}")
-
-
     if query == ORIGINAL_COMPETITION_ID:
-        print("corrent response")
         taskId = response['taskId']
 
         if taskId == None: 

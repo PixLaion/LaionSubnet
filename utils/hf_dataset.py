@@ -27,7 +27,7 @@ def upload_datasets(imageUrls, prompts):
     upload_file(
         path_or_fileobj=f"temp/{timestamp_string}.parquet",
         path_in_repo=f"{timestamp_string}.parquet",
-        repo_id="giantdev/test_dataset",
+        repo_id="PixLaion/test_dataset",
         token=token,
         repo_type="dataset"
     )

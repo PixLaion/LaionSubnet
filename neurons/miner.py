@@ -26,10 +26,10 @@ from utils.corcel import generate_prompt
 import laion
 from utils.image_pipeline import generateSDXLImage
 from utils.midjourney import generateMJImage
+from constants import ORIGINAL_COMPETITION_ID
 
 # import base miner class which takes care of most of the boilerplate
 from laion.base.miner import BaseMinerNeuron
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -66,7 +66,7 @@ class Miner(BaseMinerNeuron):
         """
         # TODO(developer): Replace with actual implementation logic.
         bt.logging.info(f"Received dummy input: {synapse.dummy_input}")
-        if synapse.dummy_input == "midjourneys:text2img":
+        if synapse.dummy_input == ORIGINAL_COMPETITION_ID:
             bt.logging.info("Received image generation query")
             bt.logging.info("▁▂▃▄▅▆▇█ Generating prompt with corcel...")
             

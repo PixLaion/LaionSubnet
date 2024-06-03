@@ -16,17 +16,24 @@ headers = {
 }
 
 def generateMJImage(prompt=""):
-    try:
-        data = {
-            "prompt": prompt,
-            "process_mode": "fast"
-        }
-        response = requests.post("https://api.midjourneyapi.xyz/mj/v2/imagine", headers=headers, data=json.dumps(data))
-        print(response.json())
-        return response.json()['task_id']
-    except Exception as e:
-        print("error", e)
-        return ""
+    retry = 0
+    while True:
+        try:
+            data = {
+                "prompt": prompt,
+                "process_mode": "fast"
+            }
+            response = requests.post("https://api.midjourneyapi.xyz/mj/v2/imagine", headers=headers, data=json.dumps(data))
+            print(response.json())
+            if response.json()['status'] == 'success':
+                return response.json()['task_id']
+            else:
+                return ""
+        except Exception as e:
+            print("error", e)
+            retry += 1
+            if retry > 20:
+                return ""
 
 
 def fetchImage(taskId, path="temp/midjourney/text2img"):

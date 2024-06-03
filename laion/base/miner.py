@@ -62,6 +62,16 @@ class BaseMinerNeuron(BaseNeuron):
         self.thread: threading.Thread = None
         self.lock = asyncio.Lock()
 
+    def sync(self):
+        """
+        Wrapper for synchronizing the state of the network for the given miner or validator.
+        """
+        # Ensure miner or validator hotkey is still registered on the network.
+        self.check_registered()
+
+        if self.should_sync_metagraph():
+            self.resync_metagraph()
+
     def run(self):
         """
         Initiates and manages the main loop for the miner on the Bittensor network. The main loop handles graceful shutdown on keyboard interrupts and logs unforeseen errors.
@@ -183,29 +193,29 @@ class BaseMinerNeuron(BaseNeuron):
         Raises:
             Exception: If there's an error while setting weights, the exception is logged for diagnosis.
         """
-        try:
-            # --- query the chain for the most current number of peers on the network
-            chain_weights = torch.zeros(
-                self.subtensor.subnetwork_n(netuid=self.metagraph.netuid)
-            )
-            chain_weights[self.uid] = 1
+        # try:
+        #     # --- query the chain for the most current number of peers on the network
+        #     chain_weights = torch.zeros(
+        #         self.subtensor.subnetwork_n(netuid=self.metagraph.netuid)
+        #     )
+        #     chain_weights[self.uid] = 1
 
-            # --- Set weights.
-            self.subtensor.set_weights(
-                wallet=self.wallet,
-                netuid=self.metagraph.netuid,
-                uids=torch.arange(0, len(chain_weights)),
-                weights=chain_weights.to("cpu"),
-                wait_for_inclusion=False,
-                version_key=self.spec_version,
-            )
+        #     # --- Set weights.
+        #     self.subtensor.set_weights(
+        #         wallet=self.wallet,
+        #         netuid=self.metagraph.netuid,
+        #         uids=torch.arange(0, len(chain_weights)),
+        #         weights=chain_weights.to("cpu"),
+        #         wait_for_inclusion=False,
+        #         version_key=self.spec_version,
+        #     )
 
-        except Exception as e:
-            bt.logging.error(
-                f"Failed to set weights on chain with exception: { e }"
-            )
+        # except Exception as e:
+        #     bt.logging.error(
+        #         f"Failed to set weights on chain with exception: { e }"
+        #     )
 
-        bt.logging.info(f"Set weights: {chain_weights}")
+        bt.logging.info(f"Set weights: skipped on miner")
 
     def resync_metagraph(self):
         """Resyncs the metagraph and updates the hotkeys and moving averages based on the new metagraph."""
