@@ -70,16 +70,21 @@ class Miner(BaseMinerNeuron):
             bt.logging.info("Received image generation query")
             bt.logging.info("▁▂▃▄▅▆▇█ Generating prompt with corcel...")
             
-            prompt_list = generate_prompt()
-            bt.logging.info(f"✅ Prompt generated: {prompt_list[0]}")
-            # urls = generateSDXLImage(
-            #     prompt=prompt_list[0],
-            #     samples=4)
-            taskId = generateMJImage(prompt_list[0])
-            bt.logging.info(f"😎 MidJourney task created: {taskId}")
+            try :
+                prompt_list = generate_prompt()
+                bt.logging.info(f"✅ Prompt generated: {prompt_list[0]}")
+                # urls = generateSDXLImage(
+                #     prompt=prompt_list[0],
+                #     samples=4)
+                taskId = generateMJImage(prompt_list[0])
+                bt.logging.info(f"😎 MidJourney task created: {taskId}")
 
-            synapse.taskId = taskId
-            synapse.prompt = prompt_list[0]
+                synapse.taskId = taskId
+                synapse.prompt = prompt_list[0]
+            except Exception as e:
+                bt.logging.error(e)
+                synapse.taskId = None
+                synapse.prompt = None
         else:
             synapse.taskId = None
             synapse.prompt = None

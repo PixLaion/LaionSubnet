@@ -125,9 +125,10 @@ class BaseMinerNeuron(BaseNeuron):
                         break
 
                 # Sync metagraph and potentially set weights.
-                self.sync()
                 self.step += 1
-
+                if self.step % 100 == 0:
+                    self.sync()
+                    
         # If someone intentionally stops the miner, it'll safely terminate operations.
         except KeyboardInterrupt:
             self.axon.stop()
