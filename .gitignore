@@ -28,6 +28,7 @@ MANIFEST
 my-env/
 temp/midjourney/text2img/*
 temp/openai/text2img/*
+temp/*.parquet
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
