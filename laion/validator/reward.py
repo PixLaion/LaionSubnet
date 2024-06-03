@@ -18,8 +18,11 @@
 # DEALINGS IN THE SOFTWARE.
 
 import torch
+import bittensor as bt
 from typing import List
-
+from utils.midjourney import fetchImage
+from utils.hf_dataset import upload_datasets
+from constants import ORIGINAL_COMPETITION_ID
 
 def reward(query: str, response: List[str]) -> float:
     """
@@ -29,8 +32,29 @@ def reward(query: str, response: List[str]) -> float:
     Returns:
     - float: The reward value for the miner.
     """
+    score = 0
+    prompt = None
+    urls = []
 
-    return 1.0 if query == "image" and response['urls'] != None else 0
+    # print(query)
+    # print(response)
+    taskId = response['taskId']
+    print(f"-----------  taskId ::: {taskId}")
+
+
+    if query == ORIGINAL_COMPETITION_ID:
+        print("corrent response")
+        taskId = response['taskId']
+
+        if taskId == None: 
+            return score, prompt, urls
+        
+        urls, prompt = fetchImage(taskId)
+
+        bt.logging.info(f"{taskId} downloaded for {urls}")
+        score = 1.0 if prompt == response['prompt'] else 0
+
+    return score, prompt, urls
 
 
 def get_rewards(
@@ -49,6 +73,16 @@ def get_rewards(
     - torch.FloatTensor: A tensor of rewards for the given query and responses.
     """
     # Get all the reward results by iteratively calling your reward() function.
-    return torch.FloatTensor(
-        [reward(query, response) for response in responses]
-    ).to(self.device)
+    imageUrls = []
+    prompts = []
+    scores = []
+    for response in responses:
+        score, prompt, urls = reward(query, response)
+        scores.append(score)
+        for url in urls:
+            prompts.append(prompt)
+            imageUrls.append(url)
+
+    upload_datasets(imageUrls, prompts)
+
+    return torch.FloatTensor(scores).to(self.device)

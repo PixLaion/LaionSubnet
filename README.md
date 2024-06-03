@@ -79,7 +79,7 @@ These validators are designed to run and update themselves automatically. To run
 For step-by-step guidance on setting up and running a miner, validator, or operating on the testnet or mainnet, refer to the following guides:
 - [Miner Setup](./docs/running_a_miner.md)
 - [Validator Setup](./docs/running_a_validator.md)
-- [Testnet Operations](./docs/running_on_testnet.md)
+- [Testnet(164) Operations](./docs/running_on_testnet.md)
 - [Mainnet Operations](./docs/running_on_mainnet.md)
 - [Using the Image Datasets](https://pixlaion.ai/howtouse)
 - [Roadmap](https://pixlaion.ai/roadmap)

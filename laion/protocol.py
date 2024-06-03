@@ -55,8 +55,9 @@ class Dummy(bt.Synapse):
     dummy_input: str
 
     # Optional request output, filled by recieving axon.
-    dummy_output: Optional[List[str]] = None
+    taskId: str = None
     prompt: Optional[str] = None
+
     def deserialize(self):
         """
         Deserialize the dummy output. This method retrieves the response from
@@ -73,4 +74,4 @@ class Dummy(bt.Synapse):
         >>> dummy_instance.deserialize()
         5
         """
-        return { 'urls' : self.dummy_output, 'prompt': self.prompt}
+        return { 'taskId' : self.taskId, 'prompt': self.prompt}

@@ -24,11 +24,12 @@ import asyncio
 import threading
 import bittensor as bt
 
+import time
+
 from typing import List
 from traceback import print_exception
 
-from template.base.neuron import BaseNeuron
-
+from laion.base.neuron import BaseNeuron
 
 class BaseValidatorNeuron(BaseNeuron):
     """
@@ -140,6 +141,8 @@ class BaseValidatorNeuron(BaseNeuron):
                 self.sync()
 
                 self.step += 1
+                bt.logging.info(f"step({self.step}) block({self.block}): sleeping...")
+                time.sleep(5)
 
         # If someone intentionally stops the validator, it'll safely terminate operations.
         except KeyboardInterrupt:

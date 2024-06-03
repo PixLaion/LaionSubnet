@@ -20,15 +20,19 @@
 import time
 import typing
 import bittensor as bt
-from corcel import generate_prompt
+from utils.corcel import generate_prompt
 
 # Bittensor Miner Template:
-import template
-from image_pipeline import generateSDXLImage
+import laion
+from utils.image_pipeline import generateSDXLImage
+from utils.midjourney import generateMJImage
 
 # import base miner class which takes care of most of the boilerplate
-from template.base.miner import BaseMinerNeuron
+from laion.base.miner import BaseMinerNeuron
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Miner(BaseMinerNeuron):
     """
@@ -45,8 +49,8 @@ class Miner(BaseMinerNeuron):
         # TODO(developer): Anything specific to your use case you can do here
 
     async def forward(
-        self, synapse: template.protocol.Dummy
-    ) -> template.protocol.Dummy:
+        self, synapse: laion.protocol.Dummy
+    ) -> laion.protocol.Dummy:
         """
         Processes the incoming 'Dummy' synapse by performing a predefined operation on the input data.
         This method should be replaced with actual logic relevant to the miner's purpose.
@@ -62,27 +66,27 @@ class Miner(BaseMinerNeuron):
         """
         # TODO(developer): Replace with actual implementation logic.
         bt.logging.info(f"Received dummy input: {synapse.dummy_input}")
-        if synapse.dummy_input == "image":
+        if synapse.dummy_input == "midjourneys:text2img":
             bt.logging.info("Received image generation query")
             bt.logging.info("▁▂▃▄▅▆▇█ Generating prompt with corcel...")
             
             prompt_list = generate_prompt()
-            bt.logging.info(f"✅ Prompt generated: {prompt_list[0][1:-1]}")
+            bt.logging.info(f"✅ Prompt generated: {prompt_list[0]}")
             # urls = generateSDXLImage(
             #     prompt=prompt_list[0],
             #     samples=4)
-            urls = ["sdf", "sdf", "sdf", "sdf"]
-            bt.logging.info(f"😎 Image generated: {urls}")
+            taskId = generateMJImage(prompt_list[0])
+            bt.logging.info(f"😎 MidJourney task created: {taskId}")
 
-            synapse.dummy_output = urls
-            synapse.prompt = prompt_list[0][1:-1]
+            synapse.taskId = taskId
+            synapse.prompt = prompt_list[0]
         else:
-            synapse.dummy_output = None
+            synapse.taskId = None
             synapse.prompt = None
         return synapse
 
     async def blacklist(
-        self, synapse: template.protocol.Dummy
+        self, synapse: laion.protocol.Dummy
     ) -> typing.Tuple[bool, str]:
         """
         Determines whether an incoming request should be blacklisted and thus ignored. Your implementation should
@@ -126,7 +130,7 @@ class Miner(BaseMinerNeuron):
         )
         return False, "Hotkey recognized!"
 
-    async def priority(self, synapse: template.protocol.Dummy) -> float:
+    async def priority(self, synapse: laion.protocol.Dummy) -> float:
         """
         The priority function determines the order in which requests are handled. More valuable or higher-priority
         requests are processed before others. You should design your own priority mechanism with care.

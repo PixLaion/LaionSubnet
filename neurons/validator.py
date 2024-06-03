@@ -24,11 +24,11 @@ import time
 import bittensor as bt
 
 # Bittensor Validator Template:
-import template
-from template.validator import forward
+import laion
+from laion.validator import forward
 
 # import base validator class which takes care of most of the boilerplate
-from template.base.validator import BaseValidatorNeuron
+from laion.base.validator import BaseValidatorNeuron
 
 
 class Validator(BaseValidatorNeuron):

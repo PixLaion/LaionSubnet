@@ -1,2 +1,6 @@
 bittensor
 torch
+pillow
+loguru
+datasets
+transformers
