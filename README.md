@@ -34,7 +34,7 @@ Welcome to PixLaion, an innovative tool hosted on the Bittensor network, designe
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/pixlaion.git
+   git clone https://github.com/PixLaion/LaionSubnet.git
    ```
 2. Install the requirements:
    ```
@@ -50,6 +50,7 @@ Welcome to PixLaion, an innovative tool hosted on the Bittensor network, designe
 Before running a miner or validator, ensure to:
 
 - [Create an account and purchase an API key on goapi.ai](https://goapi.ai).
+- [Create an account and purchase an API key on corcel.io](https://app.corcel.io).
 
 ### Environment Variables Configuration
 
@@ -59,7 +60,7 @@ For setting up the necessary environment variables for your miner or validator, 
 
   ```
   python -m neurons/miners/miner.py 
-      --netuid 25
+      --netuid 37
       --subtensor.network finney
       --wallet.name <your miner wallet>
       --wallet.hotkey <your validator hotkey>

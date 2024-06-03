@@ -3,8 +3,7 @@
 This tutorial shows how to use the bittensor `btcli` to create a subnetwork and connect your incentive mechanism to it. 
 
 **IMPORTANT:** Before attempting to register on mainnet, we strongly recommend that you:
-- First run [Running Subnet Locally](running_on_staging.md), and
-- Then run [Running on the Testnet](running_on_testnet.md).
+- First run [Running on the Testnet](running_on_testnet.md).
 
 Your incentive mechanisms running on the mainnet are open to anyone. They emit real TAO. Creating these mechanisms incur a `lock_cost` in TAO.
 
@@ -31,13 +30,13 @@ After installing `bittensor`, proceed as below:
 In your project directory:
 
 ```bash
-git clone https://github.com/opentensor/bittensor-subnet-template.git 
+git https://github.com/PixLaion/LaionSubnet.git
 ```
 
-Next, `cd` into `bittensor-subnet-template` repo directory:
+Next, `cd` into `LaionSubnet` repo directory:
 
 ```bash
-cd bittensor-subnet-template
+cd LaionSubnet
 ```
 
 Install the Bittensor subnet template package:

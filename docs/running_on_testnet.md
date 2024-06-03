@@ -129,7 +129,7 @@ This step registers your subnet validator and subnet miner keys to the subnet, g
 Register your miner key to the subnet:
 
 ```bash
-btcli subnet recycle_register --netuid 13 --subtensor.network test --wallet.name miner --wallet.hotkey default
+btcli subnet recycle_register --netuid 164 --subtensor.network test --wallet.name miner --wallet.hotkey default
 ```
 
 Follow the below prompts:
@@ -146,7 +146,7 @@ Follow the below prompts:
 Next, register your validator key to the subnet:
 
 ```bash
-btcli subnet recycle_register --netuid 13 --subtensor.network test --wallet.name validator --wallet.hotkey default
+btcli subnet recycle_register --netuid 164 --subtensor.network test --wallet.name validator --wallet.hotkey default
 ```
 
 Follow the prompts:
@@ -173,7 +173,7 @@ btcli wallet overview --wallet.name validator --subtensor.network test
 The above command will display the below:
 
 ```bash
-Subnet: 1                                                                                                                                                                
+Subnet: 164                                                                                                                                                                
 COLDKEY  HOTKEY   UID  ACTIVE  STAKE(τ)     RANK    TRUST  CONSENSUS  INCENTIVE  DIVIDENDS  EMISSION(ρ)   VTRUST  VPERMIT  UPDATED  AXON  HOTKEY_SS58                    
 miner    default  0      True   0.00000  0.00000  0.00000    0.00000    0.00000    0.00000            0  0.00000                14  none  5GTFrsEQfvTsh3WjiEVFeKzFTc2xcf…
 1        1        2            τ0.00000  0.00000  0.00000    0.00000    0.00000    0.00000           ρ0  0.00000                                                         
@@ -189,7 +189,7 @@ btcli wallet overview --wallet.name miner --subtensor.network test
 The above command will display the below:
 
 ```bash
-Subnet: 1                                                                                                                                                                
+Subnet: 164                                                                                                                                                                
 COLDKEY  HOTKEY   UID  ACTIVE  STAKE(τ)     RANK    TRUST  CONSENSUS  INCENTIVE  DIVIDENDS  EMISSION(ρ)   VTRUST  VPERMIT  UPDATED  AXON  HOTKEY_SS58                    
 miner    default  1      True   0.00000  0.00000  0.00000    0.00000    0.00000    0.00000            0  0.00000                14  none  5GTFrsEQfvTsh3WjiEVFeKzFTc2xcf…
 1        1        2            τ0.00000  0.00000  0.00000    0.00000    0.00000    0.00000           ρ0  0.00000                                                         
@@ -201,7 +201,7 @@ miner    default  1      True   0.00000  0.00000  0.00000    0.00000    0.00000 
 Run the subnet miner:
 
 ```bash
-python neurons/miner.py --netuid 1 --subtensor.network test --wallet.name miner --wallet.hotkey default --logging.debug
+python neurons/miner.py --netuid 164 --subtensor.network test --wallet.name miner --wallet.hotkey default --logging.debug
 ```
 
 You will see the below terminal output:
@@ -213,7 +213,7 @@ You will see the below terminal output:
 Next, run the subnet validator:
 
 ```bash
-python neurons/validator.py --netuid 1 --subtensor.network test --wallet.name validator --wallet.hotkey default --logging.debug
+python neurons/validator.py --netuid 164 --subtensor.network test --wallet.name validator --wallet.hotkey default --logging.debug
 ```
 
 You will see the below terminal output:
