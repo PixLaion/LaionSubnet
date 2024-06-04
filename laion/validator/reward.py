@@ -33,7 +33,7 @@ def reward(query: str, response: List[str]) -> float:
     - float: The reward value for the miner.
     """
     score = 0
-    prompt = None
+    prompt = ""
     urls = []
     discordUrl = ""
 
@@ -42,7 +42,7 @@ def reward(query: str, response: List[str]) -> float:
         taskId = response['taskId']
 
         if taskId == None: 
-            return score, prompt, urls
+            return score, prompt, urls, discordUrl
         
         urls, prompt, discordUrl = fetchImage(taskId)
 
