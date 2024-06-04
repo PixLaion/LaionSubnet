@@ -65,6 +65,7 @@ class Miner(BaseMinerNeuron):
         the miner's intended operation. This method demonstrates a basic transformation of input data.
         """
         # TODO(developer): Replace with actual implementation logic.
+        bt.logging.info(f"ORIGINAL_COMPETITION_ID: {ORIGINAL_COMPETITION_ID}")
         bt.logging.info(f"Received dummy input: {synapse.dummy_input}")
         if synapse.dummy_input == ORIGINAL_COMPETITION_ID:
             bt.logging.info("Received image generation query")

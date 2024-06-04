@@ -39,6 +39,7 @@ def generateMJImage(prompt=""):
 def fetchImage(taskId, path="temp/midjourney/text2img"):
     fileNames = []
     prompt = ""
+    discordUrl = ""
     while True:
         # Send a GET request to ID URL
         time.sleep(4)
@@ -53,6 +54,7 @@ def fetchImage(taskId, path="temp/midjourney/text2img"):
             if res['status'] == "finished" :
 
                 urls = saveImage(res['task_result']['discord_image_url'], path)
+                discordUrl = res['task_result']['discord_image_url']
                 prompt = res['meta']['task_request']['prompt']
                 fileNames = urls
                 break
@@ -63,7 +65,7 @@ def fetchImage(taskId, path="temp/midjourney/text2img"):
             break
 
 
-    return fileNames, prompt
+    return fileNames, prompt, discordUrl
 
 def saveImage(url, path):
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -105,18 +107,27 @@ def splitImage(url, path):
 
     return urls
 
+def load_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return image_file.read()
+
 if __name__ == "__main__":
     prompt = generate_prompt()
     taskId = generateMJImage(prompt[0])
     
-    urls, prompt = fetchImage(taskId)
+    urls, prompt, discordUrl = fetchImage(taskId)
     prompts = [prompt, prompt, prompt, prompt]
+    discordUrls = [discordUrl, discordUrl, discordUrl, discordUrl]
+    index = [1, 2, 3, 4]
     df = pd.DataFrame({
+        "discord_image_urls": discordUrls,
+        "prompt": prompts,
         "image_path": urls,
-        "prompt": prompts
     })
+
+    df['image'] = df['image_path'].apply(load_image)
 
     df.to_parquet("temp/1.parquet")
 
 
-    print(prompt, urls)
+    print(prompt, urls, discordUrl)

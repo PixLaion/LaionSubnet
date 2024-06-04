@@ -23,7 +23,7 @@ from laion.protocol import Dummy
 from laion.validator.reward import get_rewards
 from laion.utils.uids import get_random_uids
 
-from constants import CompetitionParameters, ORIGINAL_COMPETITION_ID
+from constants import ORIGINAL_COMPETITION_ID
 
 
 async def forward(self):
@@ -40,6 +40,9 @@ async def forward(self):
     # get_random_uids is an example method, but you can replace it with your own.
     miner_uids = get_random_uids(self, k=self.config.neuron.sample_size)
     
+    for uid in miner_uids:
+        print(self.metagraph.axons[uid])
+        
     # The dendrite client queries the network.
     responses = self.dendrite.query(
         # Send the query to selected miner axons in the network.
@@ -49,7 +52,7 @@ async def forward(self):
         # All responses have the deserialize function called on them before returning.
         # You are encouraged to define your own deserialization function.
         deserialize=True,
-        timeout=150,
+        timeout=20,
     )
 
     # Log the results for monitoring purposes.

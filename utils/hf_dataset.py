@@ -7,6 +7,7 @@ from datetime import datetime
 import pandas as pd
 import os
 import io
+from utils.midjourney import load_image
 
 load_dotenv()
 
@@ -14,12 +15,16 @@ api = HfApi()
 token = os.getenv("HF_ACCESS_TOKEN")
 HfFolder.save_token(token)
 
-def upload_datasets(imageUrls, prompts):
+def upload_datasets(imageUrls, prompts, discordUrls, indexes):
     df = pd.DataFrame({
+        "discordUrl": discordUrls,
+        "prompt": prompts,
         "image_path": imageUrls,
-        "prompt": prompts
+        "indexes": indexes
     })
-        
+    
+    df['image'] = df['image_path'].apply(load_image)
+
     current_timestamp = datetime.now()
     timestamp_string = current_timestamp.strftime("%Y%m%d%H%M%S")
     df.to_parquet(f"temp/{timestamp_string}.parquet")

@@ -35,19 +35,21 @@ def reward(query: str, response: List[str]) -> float:
     score = 0
     prompt = None
     urls = []
+    discordUrl = ""
 
+    print(f"query {ORIGINAL_COMPETITION_ID}")
     if query == ORIGINAL_COMPETITION_ID:
         taskId = response['taskId']
 
         if taskId == None: 
             return score, prompt, urls
         
-        urls, prompt = fetchImage(taskId)
+        urls, prompt, discordUrl = fetchImage(taskId)
 
         bt.logging.info(f"{taskId} downloaded for {urls}")
         score = 1.0 if prompt == response['prompt'] else 0
 
-    return score, prompt, urls
+    return score, prompt, urls, discordUrl
 
 
 def get_rewards(
@@ -69,13 +71,20 @@ def get_rewards(
     imageUrls = []
     prompts = []
     scores = []
+    discordUrls = []
+    indexes = []
+
     for response in responses:
-        score, prompt, urls = reward(query, response)
+        score, prompt, urls, discordUrl = reward(query, response)
+        i = 1
         scores.append(score)
         for url in urls:
             prompts.append(prompt)
+            discordUrls.append(discordUrl)
             imageUrls.append(url)
+            indexes.append(i)
+            i += 1
 
-    upload_datasets(imageUrls, prompts)
+    upload_datasets(imageUrls, prompts, discordUrls, indexes)
 
     return torch.FloatTensor(scores).to(self.device)

@@ -31,6 +31,8 @@ class BaseMinerNeuron(BaseNeuron):
     Base class for Bittensor miners.
     """
 
+    neuron_type: str = "MinerNeuron"
+
     def __init__(self, config=None):
         super().__init__(config=config)
 
@@ -62,16 +64,6 @@ class BaseMinerNeuron(BaseNeuron):
         self.thread: threading.Thread = None
         self.lock = asyncio.Lock()
 
-    def sync(self):
-        """
-        Wrapper for synchronizing the state of the network for the given miner or validator.
-        """
-        # Ensure miner or validator hotkey is still registered on the network.
-        self.check_registered()
-
-        if self.should_sync_metagraph():
-            self.resync_metagraph()
-
     def run(self):
         """
         Initiates and manages the main loop for the miner on the Bittensor network. The main loop handles graceful shutdown on keyboard interrupts and logs unforeseen errors.
@@ -101,14 +93,18 @@ class BaseMinerNeuron(BaseNeuron):
         # Serve passes the axon information to the network + netuid we are hosting on.
         # This will auto-update if the axon port of external ip have changed.
         bt.logging.info(
-            f"Serving miner axon {self.axon} on network: {self.config.subtensor.chain_endpoint} with netuid: {self.config.netuid}"
+            f"Serving miner axon {self.axon} on network: {self.subtensor.chain_endpoint} with netuid: {self.config.netuid}"
         )
+        # self.subtensor.serve_axon(
+        #     netuid=self.config.netuid,
+        #     axon=self.axon,
+        # )
         self.axon.serve(netuid=self.config.netuid, subtensor=self.subtensor)
 
         # Start  starts the miner's axon, making it active on the network.
         self.axon.start()
 
-        bt.logging.info(f"Miner starting at block: {self.block}")
+        bt.logging.info(f"Miner starting at block: {self.block} {self.axon}")
 
         # This loop maintains the miner's operations until intentionally stopped.
         try:
@@ -125,9 +121,8 @@ class BaseMinerNeuron(BaseNeuron):
                         break
 
                 # Sync metagraph and potentially set weights.
+                self.sync()
                 self.step += 1
-                if self.step % 100 == 0:
-                    self.sync()
                     
         # If someone intentionally stops the miner, it'll safely terminate operations.
         except KeyboardInterrupt:
